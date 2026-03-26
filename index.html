@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asha — AI Product Management</title>
+<meta name="description" content="AI Product Manager building intelligent finance analytics. Case studies, teardowns, and frameworks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FAFAF8;
+    --bg-card: #FFFFFF;
+    --bg-subtle: #F3F2EE;
+    --text: #1A1A18;
+    --text-secondary: #6B6B65;
+    --text-tertiary: #9C9A92;
+    --border: rgba(0,0,0,0.08);
+    --accent: #1D6B4F;
+    --accent-light: #E8F5EE;
+    --accent-text: #145A40;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141413;
+      --bg-card: #1C1C1A;
+      --bg-subtle: #222220;
+      --text: #E8E6DF;
+      --text-secondary: #9C9A92;
+      --text-tertiary: #6B6B65;
+      --border: rgba(255,255,255,0.08);
+      --accent: #5DCAA5;
+      --accent-light: #1A2E26;
+      --accent-text: #5DCAA5;
+    }
+  }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Header */
+  header {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .overline {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 42px;
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  .intro {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 520px;
+    line-height: 1.7;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .tag {
+    font-size: 12px;
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text-secondary);
+  }
+
+  /* Sections */
+  section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-of-type {
+    border-bottom: none;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 32px;
+  }
+
+  /* Case study cards */
+  .case-study {
+    padding: 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .case-study:hover {
+    border-color: rgba(0,0,0,0.15);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .case-study:hover { border-color: rgba(255,255,255,0.15); }
+  }
+
+  .case-study-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .case-study h3 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .status {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .status-shipped {
+    background: var(--accent-light);
+    color: var(--accent-text);
+  }
+
+  .status-soon {
+    background: var(--bg-subtle);
+    color: var(--text-tertiary);
+  }
+
+  .case-study p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  .case-study-tags {
+    display: flex;
+    gap: 4px;
+  }
+
+  .case-study-tags span {
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  /* Expandable case study detail */
+  .case-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, margin 0.3s ease;
+    margin-top: 0;
+  }
+
+  .case-detail.open {
+    max-height: 600px;
+    margin-top: 16px;
+  }
+
+  .case-detail-inner {
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .case-detail-inner h4 {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+
+  .case-detail-inner h4:first-child {
+    margin-top: 0;
+  }
+
+  .case-detail-inner p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 0;
+  }
+
+  .read-toggle {
+    font-size: 13px;
+    color: var(--accent-text);
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    margin-top: 12px;
+    font-family: inherit;
+  }
+
+  .read-toggle:hover {
+    text-decoration: underline;
+  }
+
+  /* Teardown cards */
+  .teardown-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 520px) {
+    .teardown-grid { grid-template-columns: 1fr; }
+  }
+
+  .teardown {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .teardown:hover {
+    border-color: rgba(0,0,0,0.15);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .teardown:hover { border-color: rgba(255,255,255,0.15); }
+  }
+
+  .teardown h3 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .teardown p {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    line-height: 1.5;
+  }
+
+  .teardown-placeholder {
+    opacity: 0.45;
+  }
+
+  /* Framework cards */
+  .framework-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 520px) {
+    .framework-grid { grid-template-columns: 1fr; }
+  }
+
+  .framework {
+    padding: 20px;
+    background: var(--bg-subtle);
+    border-radius: 12px;
+  }
+
+  .framework h3 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .framework p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* Footer */
+  footer {
+    padding: 40px 0 60px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+
+  footer a {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  footer a:hover {
+    color: var(--text);
+  }
+
+  .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--text-tertiary);
+  }
+
+  /* Animations */
+  @media (prefers-reduced-motion: no-preference) {
+    .fade-in {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.12s; }
+    .fade-in:nth-child(3) { animation-delay: 0.19s; }
+    .fade-in:nth-child(4) { animation-delay: 0.26s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="overline fade-in">AI Product Management</div>
+    <h1 class="fade-in">Asha</h1>
+    <p class="intro fade-in">Product Manager building AI-powered finance analytics. I study how AI earns executive trust in enterprise products&mdash;and ship features that prove it.</p>
+    <div class="tags fade-in">
+      <span class="tag">ServiceNow</span>
+      <span class="tag">Finance analytics</span>
+      <span class="tag">Enterprise AI</span>
+    </div>
+  </header>
+
+  <!-- ============ CASE STUDIES ============ -->
+  <section>
+    <div class="section-label">Case studies</div>
+
+    <div class="case-study">
+      <div class="case-study-header">
+        <h3>AI-powered weekly scorecard for strategic finance</h3>
+        <span class="status status-shipped">shipped</span>
+      </div>
+      <p>How I designed prompt architecture so a VP of Strategic Finance gets the pulse of the business in seconds&mdash;and actually trusts it.</p>
+      <div class="case-study-tags">
+        <span>prompt design</span>
+        <span>&middot;</span>
+        <span>enterprise AI</span>
+        <span>&middot;</span>
+        <span>finance</span>
+      </div>
+
+      <div class="case-detail" id="case1">
+        <div class="case-detail-inner">
+          <h4>The problem</h4>
+          <p>A VP of Strategic Finance needs to open a weekly scorecard and get the pulse of the business&mdash;quickly, clearly, no guesswork. Generic AI summaries don't earn executive trust because they lack precision, context, and awareness of what changed since last week.</p>
+
+          <h4>The AI approach</h4>
+          <p>Designed a four-layer prompt architecture: role (finance analyst persona), context (revenue segments, comparison periods, known risks), task (identify top signals that need attention), and constraints (brevity, precision, uncertainty flagging).</p>
+
+          <h4>Key product decisions</h4>
+          <p>Scoped AI output to 3 signals max per week&mdash;more overwhelms, fewer feels thin. Built explicit uncertainty flagging so the model says "I'm not confident about X" rather than hallucinating. Referenced prior week's scorecard for continuity.</p>
+
+          <h4>What I learned</h4>
+          <p>The gap between "AI feature that demos well" and "AI feature that earns executive trust" is almost entirely in prompt design. The model was capable from day one&mdash;the product decisions around framing the task made the difference.</p>
+        </div>
+      </div>
+
+      <button class="read-toggle" onclick="toggleCase('case1', this)">Read more</button>
+    </div>
+
+    <!-- ADD MORE CASE STUDIES HERE: copy the case-study div above and update content -->
+
+    <div class="case-study" style="opacity: 0.5;">
+      <div class="case-study-header">
+        <h3>cRPO anomaly detection</h3>
+        <span class="status status-soon">coming soon</span>
+      </div>
+      <p>AI-powered revenue anomaly flagging for finance dashboards.</p>
+    </div>
+  </section>
+
+  <!-- ============ TEARDOWNS ============ -->
+  <section>
+    <div class="section-label">Product teardowns</div>
+
+    <div class="teardown-grid">
+
+      <!-- REPLACE this placeholder with your first real teardown -->
+      <div class="teardown teardown-placeholder">
+        <h3>Your first teardown</h3>
+        <p>Problem &middot; AI approach &middot; What I'd change</p>
+      </div>
+
+      <div class="teardown teardown-placeholder">
+        <h3>Teardown #2</h3>
+        <p>Coming soon</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ FRAMEWORKS ============ -->
+  <section>
+    <div class="section-label">Frameworks &amp; tools</div>
+
+    <div class="framework-grid">
+      <div class="framework">
+        <h3>Prompt design</h3>
+        <p>Role &rarr; Context &rarr; Task &rarr; Constraints</p>
+      </div>
+      <div class="framework">
+        <h3>AI product metrics</h3>
+        <p>Evaluation beyond accuracy&mdash;trust, time-to-insight, error recovery</p>
+      </div>
+      <div class="framework">
+        <h3>Enterprise AI trust pillars</h3>
+        <p>Transparency &middot; Explainability &middot; Accountability &middot; Privacy</p>
+      </div>
+      <div class="framework">
+        <h3>AI product strategy</h3>
+        <p>Data moats &middot; Workflow moats &middot; Trust moats &middot; Flywheels</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <a href="https://linkedin.com/in/YOUR-LINKEDIN" target="_blank" rel="noopener">LinkedIn</a>
+    <div class="dot"></div>
+    <a href="#">26-week AI PM curriculum</a>
+  </footer>
+
+</div>
+
+<script>
+function toggleCase(id, btn) {
+  const el = document.getElementById(id);
+  const isOpen = el.classList.contains('open');
+  el.classList.toggle('open');
+  btn.textContent = isOpen ? 'Read more' : 'Read less';
+}
+</script>
+
+</body>
+</html>
